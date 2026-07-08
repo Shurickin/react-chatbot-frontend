@@ -1,0 +1,22 @@
+export const chatSummaries = [
+  { id: "1", title: "Python API Auth Debug", category: "tech", updated: "2h ago" },
+  { id: "2", title: "Docker Container Port Mismatch", category: "tech", updated: "5h ago" },
+  { id: "3", title: "Centering CSS Flexbox Elements", category: "tech", updated: "1d ago" },
+  { id: "4", title: "SQL Join Optimization Strategy", category: "tech", updated: "2d ago" },
+  { id: "5", title: "React State Hook Loop", category: "tech", updated: "3d ago" },
+  { id: "6", title: "Sci-Fi Novel Outline Feedback", category: "creative", updated: "1h ago" },
+  { id: "7", title: "Birthday Poem for Coworker", category: "creative", updated: "4h ago" },
+  { id: "8", title: "Cold Email Sales Pitch", category: "creative", updated: "1d ago" },
+  { id: "9", title: "Podcast Script Intro Ideas", category: "creative", updated: "2d ago" },
+  { id: "10", title: "Instagram Caption Hook Generator", category: "creative", updated: "4d ago" },
+  { id: "11", title: "Quantum Physics Basics Explained", category: "learning", updated: "30m ago" },
+  { id: "12", title: "French Conjugation Practice Routine", category: "learning", updated: "6h ago" },
+  { id: "13", title: "Smart Home Automation Setup", category: "learning", updated: "1d ago" },
+  { id: "14", title: "Historical Timeline WW2 Events", category: "learning", updated: "3d ago" },
+  { id: "15", title: "Game Mechanics Brainstorming Session", category: "learning", updated: "1w ago" },
+  { id: "16", title: "Meeting Agenda Template Structure", category: "business", updated: "10m ago" },
+  { id: "17", title: "Resume Bullet Points Refinement", category: "business", updated: "3h ago" },
+  { id: "18", title: "Excel VLOOKUP Troubleshooting Guide", category: "business", updated: "1d ago" },
+  { id: "19", title: "Meal Prep Weekly Planner", category: "business", updated: "5d ago" },
+  { id: "20", title: "Workout Split Optimization Advice", category: "business", updated: "1w ago" }
+];
