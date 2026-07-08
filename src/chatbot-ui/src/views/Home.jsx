@@ -12,6 +12,53 @@ function Home() {
 
     const [input, setInput] = useState("");
 
+    const sendMessage = async (e) => {
+        e.preventDefault();
+
+        const question = input;
+
+        setInput("");
+
+        // Add user message
+        setMessages(prev => [
+            ...prev,
+            {
+                role: "user",
+                content: question
+            }
+        ]);
+
+        // Add empty assistant message
+        setMessages(prev => [
+            ...prev,
+            {
+                role: "assistant",
+                content: ""
+            }
+        ]);
+
+
+        await askQuestion(
+            "test-session",
+            question,
+            (chunk) => {
+                setMessages(prev => {
+                    return prev.map((msg, index) => {
+                        if (index === prev.length - 1) {
+                            return {
+                                ...msg,
+                                content: msg.content + chunk
+                            };
+                        }
+
+                        return msg;
+                    });
+                });
+            }
+        );
+    };
+
+    // This was for an entire message post-fastapi connection
     // const sendMessage = async (e) => {
     //     e.preventDefault();
 
@@ -29,44 +76,47 @@ function Home() {
 
     //     const response = await askQuestion("test-session", question);
 
+    //     console.log(response);
+
     //     setMessages(prev => [
     //         ...prev,
     //         {
     //             role: "assistant",
-    //             content: response.answer
+    //             content: response.content
     //         }
     //     ]);
     // };
 
-    const sendMessage = (e) => {
-        e.preventDefault();
+    // This was for an entire message pre-fastapi connection
+    // const sendMessage = (e) => {
+    //     e.preventDefault();
 
-        setMessages(prev => [
-            ...prev,
-            {
-                role: "user",
-                content: input
-            },
-            {
-                role: "assistant",
-                content: "Assistant: " + input
-            }
-        ]);
+    //     setMessages(prev => [
+    //         ...prev,
+    //         {
+    //             role: "user",
+    //             content: input
+    //         },
+    //         {
+    //             role: "assistant",
+    //             content: "Assistant: " + input
+    //         }
+    //     ]);
 
-        // setMessages([
-        //     ...messages,
-        //     {
-        //         role: "user",
-        //         content: input
-        //     },
-        //     {
-        //         role: "assistant",
-        //         content: "Assitant: " + input
-        //     }
-        // ]);
+    //     // setMessages([
+    //     //     ...messages,
+    //     //     {
+    //     //         role: "user",
+    //     //         content: input
+    //     //     },
+    //     //     {
+    //     //         role: "assistant",
+    //     //         content: "Assitant: " + input
+    //     //     }
+    //     // ]);
 
-        setInput("");
-    };
+    //     setInput("");
+    // };
 
     return (
         <main className="flex min-h-screen bg-black">
