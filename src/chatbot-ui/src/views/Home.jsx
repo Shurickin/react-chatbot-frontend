@@ -1,11 +1,12 @@
 import { useState } from "react";
 
-import { askQuestion } from "../api/chat";
+import { askQuestion, UploadDocument } from "../api/chat.jsx";
 
 import Sidebar from '../components/Sidebar'
 import ChatInput from "../components/ChatInput";
 import ChatMessages from "../components/ChatMsgs";
 import dropdown from "../assets/dropdown.png";
+
 
 function Home() {
     const [messages, setMessages] = useState([]);
@@ -57,6 +58,33 @@ function Home() {
             }
         );
     };
+
+    const addUploadMsg = (text) => {
+        setMessages(prev => {
+            const updated = [...prev];
+
+            const lastMsg = updated[updated.length - 1];
+
+            updated[updated.length - 1] = {
+                ...lastMsg,
+                content: text
+            };
+            // `✓ ${file.name} uploaded successfully.`
+
+            return updated;
+        });
+    }
+
+    const addMsg = (role, text) => {
+        setMessages(prev => [
+            ...prev,
+            {
+                role: role,
+                content: text
+            }
+        ]);
+    }
+
 
     // This was for an entire message post-fastapi connection
     // const sendMessage = async (e) => {
@@ -156,6 +184,8 @@ function Home() {
                             input={input}
                             setInput={setInput}
                             sendMessage={sendMessage}
+                            addUploadMsg={addUploadMsg}
+                            addMsg={addMsg}
                         />
                     </div>
                 ) : (
@@ -164,6 +194,8 @@ function Home() {
                             input={input}
                             setInput={setInput}
                             sendMessage={sendMessage}
+                            addUploadMsg={addUploadMsg}
+                            addMsg={addMsg}
                         />
                     </div>
                 )}
