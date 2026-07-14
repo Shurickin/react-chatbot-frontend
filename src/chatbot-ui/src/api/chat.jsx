@@ -44,7 +44,7 @@ export async function askQuestion(sessionId, question, onChunk) {
     }
 }
 
-export function UploadDocument({addUploadMsg, addMsg}) {
+export function UploadDocument({addUploadMsg, addMsg, sessionId}) {
     const [uploadStatus, setUploadStatus] = useState("idle");
 
     const [uploadedFile, setUploadedFile] = useState("");
@@ -60,6 +60,9 @@ export function UploadDocument({addUploadMsg, addMsg}) {
         setUploadedFile(file.name);
 
         addMsg("user", `Uploaded ${file.name}`)
+
+        await addToDB(sessionId, "user", `Uploaded ${file.name}`);
+
         addMsg("assistant", `Uploading "${file.name}"...`)
 
         //await new Promise(resolve => setTimeout(resolve, 1000000000));
@@ -79,9 +82,19 @@ export function UploadDocument({addUploadMsg, addMsg}) {
 
             setUploadStatus("success");
             addUploadMsg(`Upload Successful! You can now ask questions about ${file.name}`);
+            await addToDB(
+                sessionId,
+                "assistant",
+                `✓ Upload Successful! You can now ask questions about ${file.name}.`
+            );
         } catch {
             setUploadStatus("error");
             addUploadMsg("Upload Failed!")
+            await addToDB(
+                sessionId,
+                "assistant",
+                `Upload Failed!`
+            );
         }
 
         event.target.value = "";
@@ -103,4 +116,26 @@ export function UploadDocument({addUploadMsg, addMsg}) {
             </label>
         </div>
     );
+}
+
+export async function addToDB(session_id, role, message) {
+    const response = await fetch("http://127.0.0.1:8000/add-to-db-msgs", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            session_id: session_id,
+            role: role,
+            content: message
+        }),
+    });
+    
+    if (response.ok){
+        console.log("Message Added Successfully!")
+    }
+    else{
+        console.log("Message Not Added to DB!")
+    }
+
 }

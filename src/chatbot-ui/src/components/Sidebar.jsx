@@ -5,7 +5,7 @@ import history from "../assets/history.png";
 import newNote from "../assets/newNote.png";
 import profileImg from "../assets/profileImg.png";
 
-export default function ChatSidebar() {
+export default function ChatSidebar({setActiveTab}) {
   return (
     <div className="w-64 h-screen bg-black text-gray-200 p-4 flex flex-col border-r border-white">
         <div className='flex items-center pb-6'>
@@ -39,7 +39,7 @@ export default function ChatSidebar() {
             ))}
         </div>
 
-        <button className="mt-auto flex items-center gap-3 border-t border-zinc-700 p-4 text-left hover:bg-zinc-800">
+        <button className="mt-auto flex items-center gap-3 border-t border-zinc-700 p-4 text-left hover:bg-zinc-800" onClick={() => setActiveTab("General")}>
             <img className="w-8 h-8" src={profileImg}/>
             <p className="font-medium">Jordan Levy</p>
         </button>

@@ -20,3 +20,20 @@ export const chatSummaries = [
   { id: "19", title: "Meal Prep Weekly Planner", category: "business", updated: "5d ago" },
   { id: "20", title: "Workout Split Optimization Advice", category: "business", updated: "1w ago" }
 ];
+
+export const settingsSidebar = [
+  { id: "1", title: "General" },
+  { id: "2", title: "Notifications" },
+  { id: "3", title: "Personalization" },
+  { id: "4", title: "Plugins" },
+  { id: "5", title: "Voice" },
+  { id: "6", title: "Billing" },
+  { id: "7", title: "Data controls" },
+  { id: "8", title: "Storage" },
+  { id: "9", title: "Safety" },
+  { id: "10", title: "Security & Login" },
+  { id: "11", title: "Parental controls" },
+  { id: "12", title: "Trusted contact" },
+  { id: "13", title: "Account" },
+  { id: "14", title: "Keyboard" },
+]
