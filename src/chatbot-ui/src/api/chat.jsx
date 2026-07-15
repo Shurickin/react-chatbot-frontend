@@ -14,14 +14,14 @@
 // }
 import { useState } from "react";
 
-export async function askQuestion(sessionId, question, onChunk) {
+export async function askQuestion(conversationId, question, onChunk) {
     const response = await fetch("http://127.0.0.1:8000/ask", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            session_id: sessionId,
+            session_id: conversationId,
             question: question,
         }),
     });
@@ -138,4 +138,53 @@ export async function addToDB(session_id, role, message) {
         console.log("Message Not Added to DB!")
     }
 
+}
+
+export async function newChat(userID, setCurrentConversation, setMessages) {
+    const response = await fetch("http://127.0.0.1:8000/new-chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user_id: userID
+        }),
+    });
+    
+    if (response.ok){
+        const data = await response.json();
+
+        console.log("New convo started!");
+        console.log(data);
+
+        setCurrentConversation(data.conversation_id);
+        setMessages([]);
+    }
+    else{
+        console.log("Failed to start new convo!")
+    }
+}
+
+export async function loadConversations(userID, setConversations) {
+    const response = await fetch(`http://127.0.0.1:8000/conversations/${userID}`);
+
+    if (response.ok) {
+        const data = await response.json();
+        setConversations(data.conversations);
+    }
+    else{
+        console.log("Failed to load Convos!")
+    }
+}
+
+export async function loadConversation(conversation_id, setMessages) {
+    const response = await fetch(`http://127.0.0.1:8000/conversation/${conversation_id}`);
+
+    if (response.ok) {
+        const data = await response.json();
+        setMessages(data.conversation);
+    }
+    else{
+        console.log("Failed to load Convos!")
+    }
 }

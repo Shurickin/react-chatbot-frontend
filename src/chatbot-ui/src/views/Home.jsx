@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { askQuestion, UploadDocument } from "../api/chat.jsx";
+import { askQuestion, UploadDocument, loadConversations, loadConversation } from "../api/chat.jsx";
 
 import Sidebar from '../components/Sidebar'
 import ChatInput from "../components/ChatInput";
@@ -26,11 +26,14 @@ const panelContent = {
     'Security & Privacy': <SecurityPanel />,
 };
 
+const userID = "12";
+
 
 function Home() {
     const [messages, setMessages] = useState([]);
-    
-    const [sessionId, setID] = useState("test-session");
+
+    const [conversations, setConversations] = useState([]);
+    const [currentConversation, setCurrentConversation] = useState(null);
 
     const [input, setInput] = useState("");
 
@@ -63,8 +66,10 @@ function Home() {
             }
         ]);
 
+        console.log(currentConversation)
+
         await askQuestion(
-            "test-session",
+            currentConversation,
             question,
             (chunk) => {
                 setMessages(prev => {
@@ -108,6 +113,14 @@ function Home() {
             }
         ]);
     }
+
+    useEffect(() => {
+        loadConversations(userID, setConversations);
+    }, []);
+
+    useEffect(() => {
+        loadConversation(currentConversation, setMessages);
+    }, [currentConversation]);
 
 
     // This was for an entire message post-fastapi connection
@@ -233,7 +246,7 @@ function Home() {
             )}
 
 
-            <Sidebar setActiveTab={setActiveTab}/>
+            <Sidebar setActiveTab={setActiveTab} userID={userID} setCurrentConversation={setCurrentConversation} setMessages= {setMessages} conversations={conversations}/>
 
             <section className="flex-1 flex flex-col min-h-0">
                 <button className="flex text-white hover:bg-gray-800 transition-colors max-w-32 justify-center items-center gap-2 rounded-2xl text-2xl ml-8">
@@ -272,7 +285,7 @@ function Home() {
                             sendMessage={sendMessage}
                             addUploadMsg={addUploadMsg}
                             addMsg={addMsg}
-                            sessionId={sessionId}
+                            sessionId={currentConversation}
                         />
                     </div>
                 ) : (
@@ -283,7 +296,7 @@ function Home() {
                             sendMessage={sendMessage}
                             addUploadMsg={addUploadMsg}
                             addMsg={addMsg}
-                            sessionId={sessionId}
+                            sessionId={currentConversation}
                         />
                     </div>
                 )}
