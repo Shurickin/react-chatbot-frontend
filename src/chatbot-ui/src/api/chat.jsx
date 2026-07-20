@@ -140,7 +140,9 @@ export async function addToDB(session_id, role, message) {
 
 }
 
-export async function newChat(userID, setCurrentConversation, setMessages) {
+export async function newChat(userID, setCurrentConversation, setMessages, insideSendMsg) {
+    console.log("insideSendMsg =", insideSendMsg);
+    
     const response = await fetch("http://127.0.0.1:8000/new-chat", {
         method: "POST",
         headers: {
@@ -158,7 +160,10 @@ export async function newChat(userID, setCurrentConversation, setMessages) {
         console.log(data);
 
         setCurrentConversation(data.conversation_id);
-        setMessages([]);
+        if(!insideSendMsg){
+            setMessages([]);
+        }
+        return data.conversation_id;
     }
     else{
         console.log("Failed to start new convo!")
@@ -186,5 +191,28 @@ export async function loadConversation(conversation_id, setMessages) {
     }
     else{
         console.log("Failed to load Convos!")
+    }
+}
+
+export async function addUser(userID, email) {
+    const response = await fetch("http://127.0.0.1:8000/add-user", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user_id: userID,
+            email: email
+        }),
+    });
+    
+    if (response.ok){
+        const data = await response.json();
+
+        console.log("New user added!");
+        console.log(data);
+    }
+    else{
+        console.log("Failed to add user!")
     }
 }

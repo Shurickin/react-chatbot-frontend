@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
 
-import { askQuestion, UploadDocument, loadConversations, loadConversation } from "../api/chat.jsx";
+import { askQuestion, UploadDocument, loadConversations, loadConversation, newChat } from "../api/chat.jsx";
 
 import Sidebar from '../components/Sidebar'
 import ChatInput from "../components/ChatInput";
@@ -21,15 +23,39 @@ const SecurityPanel = () => (
     </div>
 );
 
+const handleLogOut = async () => {
+    try {
+      // This tells Firebase to delete the session token from local storage
+      await signOut(auth);
+      console.log("User successfully signed out!");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+};
+
+const AccountPanel = () => (
+    <button 
+            onClick={handleLogOut} 
+            style={{ padding: '8px 12px', backgroundColor: '#ff4d4d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        >
+        Log Out
+    </button>
+);
+
 const panelContent = {
     'General': <GeneralPanel />,
     'Security & Privacy': <SecurityPanel />,
+    'Account': <AccountPanel />,
 };
 
-const userID = "12";
+// const userID = "12";
 
 
-function Home() {
+function Home(user) {
+    const userID = user.user.uid; 
+
+    console.log(userID);
+
     const [messages, setMessages] = useState([]);
 
     const [conversations, setConversations] = useState([]);
@@ -43,6 +69,12 @@ function Home() {
 
     const sendMessage = async (e) => {
         e.preventDefault();
+
+        let conversation = currentConversation;
+
+        if (!conversation) {
+            conversation = await newChat(userID, setCurrentConversation, setMessages, true);
+        }
 
         const question = input;
 
@@ -66,10 +98,13 @@ function Home() {
             }
         ]);
 
-        console.log(currentConversation)
+        console.log(conversation)
+        console.log(messages.length)
+
+        const isFirstMessage = messages.length === 0;
 
         await askQuestion(
-            currentConversation,
+            conversation,
             question,
             (chunk) => {
                 setMessages(prev => {
@@ -86,6 +121,11 @@ function Home() {
                 });
             }
         );
+
+        if (isFirstMessage) {
+            console.log("We are loading the new Convo!")
+            await loadConversations(userID, setConversations);
+        }
     };
 
     const addUploadMsg = (text) => {
@@ -118,9 +158,14 @@ function Home() {
         loadConversations(userID, setConversations);
     }, []);
 
-    useEffect(() => {
-        loadConversation(currentConversation, setMessages);
-    }, [currentConversation]);
+    // const handleConversationClick = async (id) => {
+    //     setCurrentConversation(id);
+    //     await loadConversation(id, setMessages);
+    // };
+
+    // useEffect(() => {
+    //     loadConversation(currentConversation, setMessages);
+    // }, [currentConversation]);
 
 
     // This was for an entire message post-fastapi connection

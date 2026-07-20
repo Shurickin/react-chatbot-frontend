@@ -6,7 +6,15 @@ import history from "../assets/history.png";
 import newNote from "../assets/newNote.png";
 import profileImg from "../assets/profileImg.png";
 
+import { loadConversation } from '../api/chat';
+
 export default function ChatSidebar({setActiveTab, userID, setCurrentConversation, setMessages, conversations}) {
+
+    const handleConversationClick = async (id) => {
+        setCurrentConversation(id);
+        await loadConversation(id, setMessages);
+    };
+
   return (
     <div className="w-64 h-screen bg-black text-gray-200 p-4 flex flex-col border-r border-white">
         <div className='flex items-center pb-6'>
@@ -14,7 +22,7 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
             <h3 className='ml-4 text-2xl'>GeorgeGPT</h3>
         </div>
         
-        <button className='flex hover:bg-gray-800 transition-colors items-center rounded' onClick={() => newChat(userID, setCurrentConversation, setMessages)}>
+        <button className='flex hover:bg-gray-800 transition-colors items-center rounded' onClick={() => newChat(userID, setCurrentConversation, setMessages, false)}>
             <img className="w-6 h-6" src={newNote}/>
             <p className="w-full text-left p-2 rounded  group flex flex-col">New Chat</p>
         </button>
@@ -35,7 +43,7 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
             <button
                 key={chat.conversation_id}
                 className="w-full text-left p-2 rounded hover:bg-gray-800 transition-colors group flex flex-col"
-                onClick={() => setCurrentConversation(chat.conversation_id)}
+                onClick={() => handleConversationClick(chat.conversation_id)}
             >
                 <span className="truncate text-sm font-medium w-full">
                 {chat.title}
