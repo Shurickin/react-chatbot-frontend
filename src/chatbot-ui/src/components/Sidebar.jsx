@@ -9,8 +9,11 @@ import profileImg from "../assets/profileImg.png";
 import { loadConversation } from '../api/chat';
 import ConversationItem from './ConversationItem';
 
-export default function ChatSidebar({setActiveTab, userID, setCurrentConversation, setMessages, conversations}) {
+export default function ChatSidebar({setActiveTab, userID, setCurrentConversation, setMessages, conversations, setConversations, setDeleteModal}) {
     const [openMenuId, setOpenMenuId] = useState(null);
+
+    const [editingId, setEditingId] = useState(null);
+    const [editedTitle, setEditedTitle] = useState("");
 
     const toggleMenu = (event, id) => {
         event.stopPropagation();
@@ -32,17 +35,18 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
 
     useEffect(() => {
         function handleClickOutside(event) {
-            // console.log("outside", chat.conversation_id);
+            console.log("outside handler");
             
             if (menuRef.current && !menuRef.current.contains(event.target)) {
+                console.log("closing menu");
                 setOpenMenuId(null);
             }
         }
 
-        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("click", handleClickOutside);
 
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("click", handleClickOutside);
         };
     }, []);
 
@@ -78,6 +82,13 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
                     setOpenMenuId={setOpenMenuId}  
                     toggleMenu={toggleMenu}  
                     handleConversationClick = {handleConversationClick}
+                    editedTitle={editedTitle}
+                    editingId={editingId}
+                    setEditingId={setEditingId}
+                    setEditedTitle={setEditedTitle}
+                    userID={userID}
+                    setConversations={setConversations}
+                    setDeleteModal={setDeleteModal}
                 />
             // <button
             //     key={chat.conversation_id}

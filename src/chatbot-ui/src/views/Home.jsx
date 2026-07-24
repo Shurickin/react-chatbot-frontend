@@ -2,7 +2,7 @@ import { useState, useEffect, use } from "react";
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
-import { askQuestion, UploadDocument, loadConversations, loadConversation, newChat } from "../api/chat.jsx";
+import { askQuestion, UploadDocument, loadConversations, loadConversation, newChat, deleteConvo } from "../api/chat.jsx";
 
 import Sidebar from '../components/Sidebar'
 import ChatInput from "../components/ChatInput";
@@ -54,7 +54,7 @@ const panelContent = {
 function Home(user) {
     const userID = user.user.uid; 
 
-    console.log(userID);
+    // console.log(userID);
 
     const [messages, setMessages] = useState([]);
 
@@ -63,7 +63,7 @@ function Home(user) {
 
     const [input, setInput] = useState("");
 
-    const [isModalOpen, setIsModalOpen] = useState(""); // Starts hidden
+    const [deleteModal, setDeleteModal] = useState(""); // Starts hidden
 
     const [activeTab, setActiveTab] = useState(""); // Starts hidden
 
@@ -98,8 +98,8 @@ function Home(user) {
             }
         ]);
 
-        console.log(conversation)
-        console.log(messages.length)
+        //console.log(conversation)
+        //console.log(messages.length)
 
         const isFirstMessage = messages.length === 0;
 
@@ -290,8 +290,41 @@ function Home(user) {
                 </div>
             )}
 
+            {/* Modal Overlay - Only opens if activeTab is not an empty string */}
+            {deleteModal && (
+                <div 
+                    className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center overflow-y-auto"
+                    onClick={() => setDeleteModal("")} // Closes modal on backdrop click
+                >
+                    {/* Settings Layout Box (Slightly wider for multi-tab settings) */}
+                    <div 
+                        className="relative flex bg-neutral-900 border border-neutral-800 text-white w-full max-w-2xl m-4 rounded-xl shadow-2xl overflow-hidden" 
+                        onClick={(e) => e.stopPropagation()} 
+                    >
 
-            <Sidebar setActiveTab={setActiveTab} userID={userID} setCurrentConversation={setCurrentConversation} setMessages= {setMessages} conversations={conversations}/>
+                        {/* Modal Content Panel */}
+                        <div className="flex-1 p-6 flex flex-col">
+                            <h2 className="text-xl font-semibold mb-6 text-white">Delete conversation?</h2>
+                            <p>This conversation will be permanently deleted and cannot be recovered.</p>
+                            
+                            <div className="flex justify-around text-sm text-neutral-300 mt-8">
+                                <button className="hover:bg-gray-800 text-red-400 px-4 py-2 rounded-2xl" onClick={() => deleteConvo(deleteModal)}>Delete</button>
+                                <button className="hover:bg-gray-800 px-4 py-2 rounded-2xl">Cancel</button>
+                            </div>
+                        </div>
+
+                        {/* Close Icon Button */}
+                        <button 
+                            onClick={() => setDeleteModal("")} 
+                            className="absolute top-4 right-4 text-neutral-400 hover:text-white text-xl"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <Sidebar setActiveTab={setActiveTab} userID={userID} setCurrentConversation={setCurrentConversation} setMessages= {setMessages} conversations={conversations} setConversations={setConversations} setDeleteModal={setDeleteModal}/>
 
             <section className="flex-1 flex flex-col min-h-0">
                 <button className="flex text-white hover:bg-gray-800 transition-colors max-w-32 justify-center items-center gap-2 rounded-2xl text-2xl ml-8">

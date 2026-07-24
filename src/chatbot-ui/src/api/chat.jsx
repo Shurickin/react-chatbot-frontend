@@ -216,3 +216,48 @@ export async function addUser(userID, email) {
         console.log("Failed to add user!")
     }
 }
+
+export async function renameTitle(conversation_id, title) {
+    const response = await fetch("http://127.0.0.1:8000/rename-title", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            conversation_id: conversation_id,
+            title: title
+        }),
+    });
+    
+    if (response.ok){
+        const data = await response.json();
+
+        console.log("New title added!");
+        console.log(data);
+    }
+    else{
+        console.log("Failed to change title!")
+    }
+}
+
+export async function deleteConvo(conversation_id) {
+    const response = await fetch("http://127.0.0.1:8000/delete-convo", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            conversation_id: conversation_id
+        }),
+    });
+    
+    if (response.ok){
+        const data = await response.json();
+
+        console.log("Convo deleted!");
+        console.log(data);
+    }
+    else{
+        console.log("Failed to delete!")
+    }
+}
