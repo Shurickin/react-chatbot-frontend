@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useRef, useEffect, React } from 'react';
 import { chatSummaries } from './chatData';
 import { newChat } from '../api/chat';
 import logo from "../assets/logo.png";
@@ -7,13 +7,44 @@ import newNote from "../assets/newNote.png";
 import profileImg from "../assets/profileImg.png";
 
 import { loadConversation } from '../api/chat';
+import ConversationItem from './ConversationItem';
 
 export default function ChatSidebar({setActiveTab, userID, setCurrentConversation, setMessages, conversations}) {
+    const [openMenuId, setOpenMenuId] = useState(null);
+
+    const toggleMenu = (event, id) => {
+        event.stopPropagation();
+
+        console.log("toggle", id);
+
+        setOpenMenuId(current => {
+            console.log("current:", current);
+            return current === id ? null : id;
+        });
+    };
 
     const handleConversationClick = async (id) => {
         setCurrentConversation(id);
         await loadConversation(id, setMessages);
     };
+
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            // console.log("outside", chat.conversation_id);
+            
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setOpenMenuId(null);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
   return (
     <div className="w-64 h-screen bg-black text-gray-200 p-4 flex flex-col border-r border-white">
@@ -38,17 +69,46 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
         
         <h2 className="text-xl font-bold mb-4 mt-8 px-2">Chat History</h2>
       
-        <div className="flex-1 overflow-y-auto space-y-1">
+        <div className="flex-1 overflow-y-auto space-y-1" ref={menuRef}>
             {conversations.map((chat) => (
-            <button
-                key={chat.conversation_id}
-                className="w-full text-left p-2 rounded hover:bg-gray-800 transition-colors group flex flex-col"
-                onClick={() => handleConversationClick(chat.conversation_id)}
-            >
-                <span className="truncate text-sm font-medium w-full">
-                {chat.title}
-                </span>
-            </button>
+                <ConversationItem 
+                    key={chat.conversation_id}
+                    chat={chat}
+                    openMenuId={openMenuId}
+                    setOpenMenuId={setOpenMenuId}  
+                    toggleMenu={toggleMenu}  
+                    handleConversationClick = {handleConversationClick}
+                />
+            // <button
+            //     key={chat.conversation_id}
+            //     className="w-full text-left p-2 rounded hover:bg-gray-800 transition-colors group flex flex-col"
+            //     onClick={() => handleConversationClick(chat.conversation_id)}
+            // >
+            //     <span className="truncate text-sm font-medium w-full">
+            //         {chat.title}
+            //         <button 
+            //             aria-label="More options"
+            //             style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}
+            //         >
+            //             ...
+            //         </button>
+            //         {isOpen && (
+            //             <div style={{
+            //             position: 'absolute',
+            //             right: 0,
+            //             background: 'white',
+            //             border: '1px solid #ccc',
+            //             boxShadow: '0px 2px 5px rgba(0,0,0,0.2)',
+            //             zIndex: 10
+            //             }}>
+            //             <ul style={{ listStyle: 'none', margin: 0, padding: '8px 12px' }}>
+            //                 <li style={{ cursor: 'pointer', padding: '4px 0' }}>Edit</li>
+            //                 <li style={{ cursor: 'pointer', padding: '4px 0' }}>Delete</li>
+            //             </ul>
+            //             </div>
+            //         )}
+            //     </span>
+            // </button>
             ))}
             {/* {chatSummaries.map((chat) => (
             <button
