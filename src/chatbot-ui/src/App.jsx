@@ -30,6 +30,7 @@ function App() {
 
   return (
     <div>
+      <title>GeorgeGPT</title>
         {/*define routes*/}
         <Router>
           <Routes>

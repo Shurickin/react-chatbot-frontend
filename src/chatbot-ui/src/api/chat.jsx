@@ -1,5 +1,5 @@
 // export async function askQuestion(sessionId, question) {
-//     const response = await fetch("http://127.0.0.1:8000/ask", {
+//     const response = await fetch(`${API_URL}/ask`, {
 //         method: "POST",
 //         headers: {
 //             "Content-Type": "application/json"
@@ -14,8 +14,10 @@
 // }
 import { useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 export async function askQuestion(conversationId, question, onChunk) {
-    const response = await fetch("http://127.0.0.1:8000/ask", {
+    const response = await fetch(`${API_URL}/ask`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -71,7 +73,7 @@ export function UploadDocument({addUploadMsg, addMsg, sessionId}) {
         formData.append("file", file);
 
         try {
-            const response = await fetch("http://localhost:8000/upload", {
+            const response = await fetch(`${API_URL}/upload`, {
                 method: "POST",
                 body: formData,
             });
@@ -119,7 +121,7 @@ export function UploadDocument({addUploadMsg, addMsg, sessionId}) {
 }
 
 export async function addToDB(session_id, role, message) {
-    const response = await fetch("http://127.0.0.1:8000/add-to-db-msgs", {
+    const response = await fetch(`${API_URL}/add-to-db-msgs`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -143,7 +145,7 @@ export async function addToDB(session_id, role, message) {
 export async function newChat(userID, setCurrentConversation, setMessages, insideSendMsg) {
     console.log("insideSendMsg =", insideSendMsg);
     
-    const response = await fetch("http://127.0.0.1:8000/new-chat", {
+    const response = await fetch(`${API_URL}/new-chat`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -171,7 +173,7 @@ export async function newChat(userID, setCurrentConversation, setMessages, insid
 }
 
 export async function loadConversations(userID, setConversations) {
-    const response = await fetch(`http://127.0.0.1:8000/conversations/${userID}`);
+    const response = await fetch(`${API_URL}/conversations/${userID}`);
 
     if (response.ok) {
         const data = await response.json();
@@ -183,7 +185,7 @@ export async function loadConversations(userID, setConversations) {
 }
 
 export async function loadConversation(conversation_id, setMessages) {
-    const response = await fetch(`http://127.0.0.1:8000/conversation/${conversation_id}`);
+    const response = await fetch(`${API_URL}/conversation/${conversation_id}`);
 
     if (response.ok) {
         const data = await response.json();
@@ -195,7 +197,7 @@ export async function loadConversation(conversation_id, setMessages) {
 }
 
 export async function addUser(userID, email) {
-    const response = await fetch("http://127.0.0.1:8000/add-user", {
+    const response = await fetch(`${API_URL}/add-user`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -218,7 +220,7 @@ export async function addUser(userID, email) {
 }
 
 export async function renameTitle(conversation_id, title) {
-    const response = await fetch("http://127.0.0.1:8000/rename-title", {
+    const response = await fetch(`${API_URL}/rename-title`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -241,7 +243,7 @@ export async function renameTitle(conversation_id, title) {
 }
 
 export async function deleteConvo(conversation_id) {
-    const response = await fetch("http://127.0.0.1:8000/delete-convo", {
+    const response = await fetch(`${API_URL}/delete-convo`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
