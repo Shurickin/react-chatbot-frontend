@@ -8,7 +8,7 @@ import Sidebar from '../components/Sidebar'
 import ChatInput from "../components/ChatInput";
 import ChatMessages from "../components/ChatMsgs";
 import dropdown from "../assets/dropdown.png";
-import {settingsSidebar} from '../components/ChatData.js';
+import {settingsSidebar} from '../components/ChatData';
 
 // Put these smaller components above your main Home component
 const GeneralPanel = () => (

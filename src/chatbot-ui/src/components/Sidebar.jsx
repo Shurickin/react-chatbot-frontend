@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, React } from 'react';
-import { chatSummaries } from './chatData';
+import { chatSummaries } from './ChatData';
 import { newChat } from '../api/chat';
 import logo from "../assets/logo.png";
 import history from "../assets/history.png";
