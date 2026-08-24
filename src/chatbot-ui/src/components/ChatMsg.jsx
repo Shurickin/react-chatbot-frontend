@@ -15,11 +15,15 @@ const ChatMessage = ({ role, content }) => {
                     role === "user"
                         ? "bg-cyan-600 text-white"
                         : "bg-gray-700 text-white"
-                } ${content === "Thinking" ? "thinking-dots" : null}`}
+                }`}
             >
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {content}
-                </ReactMarkdown>
+                {content === "Thinking" ? (
+                    <span className="thinking-dots">Thinking</span>
+                ) : (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {content}
+                    </ReactMarkdown>
+                )}
             </div>
         </div>
     );

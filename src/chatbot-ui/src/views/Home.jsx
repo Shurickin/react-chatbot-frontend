@@ -9,6 +9,7 @@ import ChatInput from "../components/ChatInput";
 import ChatMessages from "../components/ChatMsgs";
 import dropdown from "../assets/dropdown.png";
 import {settingsSidebar} from '../components/ChatData';
+import { models } from '../components/Models';
 
 // Put these smaller components above your main Home component
 const GeneralPanel = () => (
@@ -67,6 +68,8 @@ function Home(user) {
 
     const [activeTab, setActiveTab] = useState(""); // Starts hidden
 
+    const [selectedModel, setSelectedModel] = useState("nvidia/nemotron-3-ultra-550b-a55b:free");
+
     const sendMessage = async (e) => {
         e.preventDefault();
 
@@ -107,6 +110,7 @@ function Home(user) {
             await askQuestion(
                 conversation,
                 question,
+                selectedModel,
                 (chunk) => {
                     setMessages(prev => {
                         return prev.map((msg, index) => {
@@ -162,76 +166,6 @@ function Home(user) {
     useEffect(() => {
         loadConversations(userID, setConversations);
     }, []);
-
-    // const handleConversationClick = async (id) => {
-    //     setCurrentConversation(id);
-    //     await loadConversation(id, setMessages);
-    // };
-
-    // useEffect(() => {
-    //     loadConversation(currentConversation, setMessages);
-    // }, [currentConversation]);
-
-
-    // This was for an entire message post-fastapi connection
-    // const sendMessage = async (e) => {
-    //     e.preventDefault();
-
-    //     const question = input;
-
-    //     setMessages(prev => [
-    //         ...prev,
-    //         {
-    //             role: "user",
-    //             content: question
-    //         }
-    //     ]);
-
-    //     setInput("");
-
-    //     const response = await askQuestion("test-session", question);
-
-    //     console.log(response);
-
-    //     setMessages(prev => [
-    //         ...prev,
-    //         {
-    //             role: "assistant",
-    //             content: response.content
-    //         }
-    //     ]);
-    // };
-
-    // This was for an entire message pre-fastapi connection
-    // const sendMessage = (e) => {
-    //     e.preventDefault();
-
-    //     setMessages(prev => [
-    //         ...prev,
-    //         {
-    //             role: "user",
-    //             content: input
-    //         },
-    //         {
-    //             role: "assistant",
-    //             content: "Assistant: " + input
-    //         }
-    //     ]);
-
-    //     // setMessages([
-    //     //     ...messages,
-    //     //     {
-    //     //         role: "user",
-    //     //         content: input
-    //     //     },
-    //     //     {
-    //     //         role: "assistant",
-    //     //         content: "Assitant: " + input
-    //     //     }
-    //     // ]);
-
-    //     setInput("");
-    // };
 
     return (
         <main className="flex min-h-screen bg-black">
@@ -332,10 +266,21 @@ function Home(user) {
             <Sidebar setActiveTab={setActiveTab} userID={userID} setCurrentConversation={setCurrentConversation} setMessages= {setMessages} conversations={conversations} setConversations={setConversations} setDeleteModal={setDeleteModal}/>
 
             <section className="flex-1 flex flex-col min-h-0">
-                <button className="flex text-white hover:bg-gray-800 transition-colors max-w-32 justify-center items-center gap-2 rounded-2xl text-2xl ml-8">
+                <select
+                    value={selectedModel}
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                    className="flex text-white hover:bg-gray-800 transition-colors max-w-32 justify-center items-center gap-2 rounded-2xl text-2xl ml-8"
+                >
+                    {models.map((model) => (
+                        <option key={model.id} value={model.id}>
+                            {model.name}
+                        </option>
+                    ))}
+                </select>
+                {/* <button className="flex text-white hover:bg-gray-800 transition-colors max-w-32 justify-center items-center gap-2 rounded-2xl text-2xl ml-8">
                     Llama3
                     <img className="w-4 h-4" src={dropdown} alt="dropdown"></img>
-                </button>
+                </button> */}
                 {/* Messages area */}
                 <div className="flex-1">
                     {messages.length === 0 ? (

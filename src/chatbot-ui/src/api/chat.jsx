@@ -16,7 +16,7 @@ import { useState } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
-export async function askQuestion(conversationId, question, onChunk) {
+export async function askQuestion(conversationId, question, selectedModel, onChunk) {
     const response = await fetch(`${API_URL}/ask`, {
         method: "POST",
         headers: {
@@ -25,6 +25,7 @@ export async function askQuestion(conversationId, question, onChunk) {
         body: JSON.stringify({
             session_id: conversationId,
             question: question,
+            model: selectedModel,
         }),
     });
 
