@@ -294,14 +294,4 @@ The frontend communicates with the backend through its REST API.
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-### One thing I'd change from your original README
-
-I **wouldn't put "Markdown rendering" or "Mobile responsiveness" under future improvements anymore**. Those are already things you've implemented. Likewise, "Multiple document support" depends on what your current backend actually supports, so I wouldn't claim it as a future feature unless that's genuinely still something you want to build.
-
 And this README now makes the project look much more like what it actually is: **a full-stack AI application with authentication, streaming, RAG, tool calling, model selection, and a modern React UI**, rather than simply "a React chatbot."
