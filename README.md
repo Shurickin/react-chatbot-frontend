@@ -293,5 +293,3 @@ The frontend communicates with the backend through its REST API.
 * 💾 Persistent conversation storage
 
 ---
-
-And this README now makes the project look much more like what it actually is: **a full-stack AI application with authentication, streaming, RAG, tool calling, model selection, and a modern React UI**, rather than simply "a React chatbot."
