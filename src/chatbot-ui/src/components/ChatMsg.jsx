@@ -1,3 +1,6 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 const ChatMessage = ({ role, content }) => {
     return (
         <div
@@ -14,7 +17,9 @@ const ChatMessage = ({ role, content }) => {
                         : "bg-gray-700 text-white"
                 } ${content === "Thinking" ? "thinking-dots" : null}`}
             >
-                {content}
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {content}
+                </ReactMarkdown>
             </div>
         </div>
     );
