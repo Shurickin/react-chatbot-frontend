@@ -6,6 +6,10 @@ import history from "../assets/history.png";
 import newNote from "../assets/newNote.png";
 import profileImg from "../assets/profileImg.png";
 
+import { CgProfile } from "react-icons/cg";
+import { PiNotePencilBold } from "react-icons/pi";
+import { GiConversation } from "react-icons/gi";
+
 import { loadConversation } from '../api/chat';
 import ConversationItem from './ConversationItem';
 
@@ -57,8 +61,8 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
             <h3 className='ml-4 text-2xl'>GeorgeGPT</h3>
         </div>
         
-        <button className='flex hover:bg-gray-800 transition-colors items-center rounded' onClick={() => newChat(userID, setCurrentConversation, setMessages, false)}>
-            <img className="w-6 h-6" src={newNote}/>
+        <button className='flex hover:bg-gray-800 transition-colors items-center rounded pl-2' onClick={() => newChat(userID, setCurrentConversation, setMessages, false)}>
+            <PiNotePencilBold size={24}/>
             <p className="w-full text-left p-2 rounded  group flex flex-col">New Chat</p>
         </button>
         {/* <div className='flex hover:bg-gray-800 transition-colors items-center rounded'>
@@ -66,8 +70,8 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
             <p className="w-full text-left p-2 rounded  group flex flex-col">New Chat</p>
         </div> */}
 
-        <div className='flex hover:bg-gray-800 transition-colors items-center rounded'>
-            <img className="w-6 h-6" src={history}/>
+        <div className='flex hover:bg-gray-800 transition-colors items-center rounded pl-2'>
+            <GiConversation size={24}/>
             <p className="w-full text-left p-2 rounded  group flex flex-col">History</p>
         </div>
         
@@ -135,7 +139,7 @@ export default function ChatSidebar({setActiveTab, userID, setCurrentConversatio
         </div>
 
         <button className="mt-auto flex items-center gap-3 border-t border-zinc-700 p-4 text-left hover:bg-zinc-800" onClick={() => setActiveTab("General")}>
-            <img className="w-8 h-8" src={profileImg}/>
+            <CgProfile size={24}/>
             <p className="font-medium">Jordan Levy</p>
         </button>
     </div>

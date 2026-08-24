@@ -11,6 +11,8 @@ import dropdown from "../assets/dropdown.png";
 import {settingsSidebar} from '../components/ChatData';
 import { models } from '../components/Models';
 
+import { IoIosArrowDropdown } from "react-icons/io";
+
 // Put these smaller components above your main Home component
 const GeneralPanel = () => (
     <div className="space-y-4">
@@ -65,6 +67,8 @@ function Home(user) {
     const [input, setInput] = useState("");
 
     const [deleteModal, setDeleteModal] = useState(""); // Starts hidden
+
+    const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
 
     const [activeTab, setActiveTab] = useState(""); // Starts hidden
 
@@ -266,17 +270,51 @@ function Home(user) {
             <Sidebar setActiveTab={setActiveTab} userID={userID} setCurrentConversation={setCurrentConversation} setMessages= {setMessages} conversations={conversations} setConversations={setConversations} setDeleteModal={setDeleteModal}/>
 
             <section className="flex-1 flex flex-col min-h-0">
-                <select
+                <div className="relative ml-8">
+                    <button
+                        type="button"
+                        onClick={() => setModelDropdownOpen(!modelDropdownOpen)}
+                        className="flex w-fit text-white hover:bg-gray-800 transition-colors justify-center items-center gap-2 rounded-2xl text-2xl px-3 py-1"
+                    >
+                        {models.find(model => model.id === selectedModel)?.name}
+
+                        <IoIosArrowDropdown />
+                        {/* <img
+                            className="w-4 h-4"
+                            src={dropdown}
+                            alt="dropdown"
+                        /> */}
+                    </button>
+
+                    {modelDropdownOpen && (
+                        <div className="absolute top-full left-4 mt-2 bg-gray-700 rounded-xl overflow-hidden shadow-lg z-50">
+                            {models.map((model) => (
+                                <button
+                                    key={model.id}
+                                    type="button"
+                                    onClick={() => {
+                                        setSelectedModel(model.id);
+                                        setModelDropdownOpen(false);
+                                    }}
+                                    className="block w-full px-3 py-2 text-left text-white hover:bg-gray-600 transition-colors"
+                                >
+                                    {model.name}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                {/* <select
                     value={selectedModel}
                     onChange={(e) => setSelectedModel(e.target.value)}
-                    className="flex text-white hover:bg-gray-800 transition-colors max-w-32 justify-center items-center gap-2 rounded-2xl text-2xl ml-8"
+                    className="text-white hover:bg-gray-800 transition-colors w-fit rounded-2xl text-2xl ml-8 mt-2 p-1"
                 >
                     {models.map((model) => (
                         <option key={model.id} value={model.id}>
                             {model.name}
                         </option>
                     ))}
-                </select>
+                </select> */}
                 {/* <button className="flex text-white hover:bg-gray-800 transition-colors max-w-32 justify-center items-center gap-2 rounded-2xl text-2xl ml-8">
                     Llama3
                     <img className="w-4 h-4" src={dropdown} alt="dropdown"></img>
