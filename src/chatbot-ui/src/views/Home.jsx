@@ -103,24 +103,29 @@ function Home(user) {
 
         const isFirstMessage = messages.length === 0;
 
-        await askQuestion(
-            conversation,
-            question,
-            (chunk) => {
-                setMessages(prev => {
-                    return prev.map((msg, index) => {
-                        if (index === prev.length - 1) {
-                            return {
-                                ...msg,
-                                content: msg.content === "Thinking" ? chunk : msg.content + chunk
-                            };
-                        }
+        try{
+            await askQuestion(
+                conversation,
+                question,
+                (chunk) => {
+                    setMessages(prev => {
+                        return prev.map((msg, index) => {
+                            if (index === prev.length - 1) {
+                                return {
+                                    ...msg,
+                                    content: msg.content === "Thinking" ? chunk : msg.content + chunk
+                                };
+                            }
 
-                        return msg;
+                            return msg;
+                        });
                     });
-                });
-            }
-        );
+                }
+            );
+        }
+        catch (error) {
+            console.error("Error sending message:", error);
+        }
 
         if (isFirstMessage) {
             console.log("We are loading the new Convo!")

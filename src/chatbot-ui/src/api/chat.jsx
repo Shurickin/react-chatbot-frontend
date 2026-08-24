@@ -28,6 +28,10 @@ export async function askQuestion(conversationId, question, onChunk) {
         }),
     });
 
+    if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+    }
+
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
 
@@ -40,7 +44,7 @@ export async function askQuestion(conversationId, question, onChunk) {
 
         const chunk = decoder.decode(value, { stream: true });
 
-        // console.log("CHUNK:", chunk);
+        console.log("CHUNK:", chunk);
 
         onChunk(chunk);
     }
