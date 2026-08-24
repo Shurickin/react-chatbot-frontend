@@ -1,4 +1,4 @@
-const models = [
+export const models = [
     {
         name: "Nemotron",
         id: "nvidia/nemotron-3-ultra-550b-a55b:free"
