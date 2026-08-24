@@ -42,6 +42,8 @@ The production build is generated with:
 npm run build
 ```
 
+---
+
 ## 🏗️ Architecture
 
 ```text
